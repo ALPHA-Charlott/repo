@@ -53,31 +53,31 @@ jobs:
           repository: ALPHA-Charlott/repo
           token: ${{ secrets.API_TOKEN }}
   
-      - name: Fetch Specific Tag from Remote Repository
-        run: |
-          git remote add upstream https://github.com/ALPHA-Charlott/azure-monitor-baseline-alerts.git
-          git fetch upstream refs/tags/${{ github.event.inputs.tag_name }}:refs/tags/${{ github.event.inputs.tag_name }}
+      # - name: Fetch Specific Tag from Remote Repository
+      #   run: |
+      #     git remote add upstream https://github.com/ALPHA-Charlott/azure-monitor-baseline-alerts.git
+      #     git fetch upstream refs/tags/${{ github.event.inputs.tag_name }}:refs/tags/${{ github.event.inputs.tag_name }}
 
-      - name: Push Tag to Local Repository
-        run: |
-          git push origin refs/tags/${{ github.event.inputs.tag_name }}
+      # - name: Push Tag to Local Repository
+      #   run: |
+      #     git push origin refs/tags/${{ github.event.inputs.tag_name }}
           
-          repository: 
+      #     repository: 
           
-      - name: make sure there is no current repo
-        env:
-          REPO: ALPHA-Charlott/repo
-        run: |
-          function is_in_remote() {
-              local branch=${1}
-              local existed_in_remote=$(git ls-remote --heads origin ${branch})
+      # - name: make sure there is no current repo
+      #   env:
+      #     REPO: ALPHA-Charlott/repo
+      #   run: |
+      #     function is_in_remote() {
+      #         local branch=${1}
+      #         local existed_in_remote=$(git ls-remote --heads origin ${branch})
           
-              if [[ -z ${existed_in_remote} ]]; then
-                  echo 0
-              else
-                  echo 1
-              fi
-          }
+      #         if [[ -z ${existed_in_remote} ]]; then
+      #             echo 0
+      #         else
+      #             echo 1
+      #         fi
+      #     }
           
       # - name: Get latest release
       #   id: get_release
