@@ -2,7 +2,7 @@
 
 name: NewReleaseCheckout
 env:
-  REMOTE_REPO: Monday
+  REMOTE_REPO: ALPHA-Charlott/azure-monitor-baseline-alerts
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
