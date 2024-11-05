@@ -88,7 +88,7 @@ jobs:
         id: cpr
         uses: peter-evans/create-pull-request@v7
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.API_TOKEN }}
           repository: ${{ github.repository }}  # Target repository where the PR will go (original repository)
           base: main  # Or the branch you want to merge into in the original repository
           # head: new-release  # The source branch from the other repository (the one you checked out)
