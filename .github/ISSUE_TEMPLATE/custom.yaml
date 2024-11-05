@@ -1,0 +1,17 @@
+---
+name: 
+about: 'new-release'
+title: '{{ env.GH_REL }}'
+labels: ',needs-triage'
+assignees: ''
+name: issue {{ env.GH_REL }}
+description: File a bug report.
+title: "{{ env.GH_REL }} "
+labels: ["pull-request", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to confirm
+
+
