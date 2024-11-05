@@ -1,8 +1,7 @@
----
-name: issue 
-description: File a bug report
-labels: "pull-request,triage"
-assignees: "j"
+name: 🐞 Bug
+description: File a bug/issue
+title: "[BUG] <title>"
+labels: ["Bug", "Needs Triage"]
 body:
   - type: textarea
     id: what-happened
