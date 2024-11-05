@@ -1,8 +1,7 @@
 # This is a basic workflow to help you get started with Actions
 
 name: NewReleaseCheckout
-env:
-  REMOTE_REPO: ALPHA-Charlott/azure-monitor-baseline-alerts
+
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
@@ -72,7 +71,7 @@ jobs:
       - name: checkout latest release(tag)
         uses: actions/checkout@v4
         with:
-          repository: ${{ REMOTE_REPO }}
+          repository: ${{ vars.REMOTE_REPO }}
           ref: 'V0.0.1'
             
       - name: Create Pull Request
