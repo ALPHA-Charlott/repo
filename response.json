@@ -1,0 +1,42 @@
+{
+  "url": "https://api.github.com/repos/ALPHA-Charlott/azure-monitor-baseline-alerts/releases/183483774",
+  "assets_url": "https://api.github.com/repos/ALPHA-Charlott/azure-monitor-baseline-alerts/releases/183483774/assets",
+  "upload_url": "https://uploads.github.com/repos/ALPHA-Charlott/azure-monitor-baseline-alerts/releases/183483774/assets{?name,label}",
+  "html_url": "https://github.com/ALPHA-Charlott/azure-monitor-baseline-alerts/releases/tag/V0.0.2",
+  "id": 183483774,
+  "author": {
+    "login": "ALPHA-Charlott",
+    "id": 67755836,
+    "node_id": "MDQ6VXNlcjY3NzU1ODM2",
+    "avatar_url": "https://avatars.githubusercontent.com/u/67755836?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/ALPHA-Charlott",
+    "html_url": "https://github.com/ALPHA-Charlott",
+    "followers_url": "https://api.github.com/users/ALPHA-Charlott/followers",
+    "following_url": "https://api.github.com/users/ALPHA-Charlott/following{/other_user}",
+    "gists_url": "https://api.github.com/users/ALPHA-Charlott/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/ALPHA-Charlott/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/ALPHA-Charlott/subscriptions",
+    "organizations_url": "https://api.github.com/users/ALPHA-Charlott/orgs",
+    "repos_url": "https://api.github.com/users/ALPHA-Charlott/repos",
+    "events_url": "https://api.github.com/users/ALPHA-Charlott/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/ALPHA-Charlott/received_events",
+    "type": "User",
+    "user_view_type": "public",
+    "site_admin": false
+  },
+  "node_id": "RE_kwDONKfSV84K771-",
+  "tag_name": "V0.0.2",
+  "target_commitish": "main",
+  "name": "V0.0.2 REL",
+  "draft": false,
+  "prerelease": false,
+  "created_at": "2024-11-01T14:11:45Z",
+  "published_at": "2024-11-04T23:38:52Z",
+  "assets": [
+
+  ],
+  "tarball_url": "https://api.github.com/repos/ALPHA-Charlott/azure-monitor-baseline-alerts/tarball/V0.0.2",
+  "zipball_url": "https://api.github.com/repos/ALPHA-Charlott/azure-monitor-baseline-alerts/zipball/V0.0.2",
+  "body": ""
+}
