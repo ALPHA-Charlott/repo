@@ -49,7 +49,12 @@ jobs:
           echo "GH_TAG_NAME={GH_TAG_NAME}" >> $GITHUB_OUTPUT
           echo "GH_HTML_URL={$GH_HTML_URL}" >> $GITHUB_OUTPUT
           echo "::set-output name=GH_HTML_URL::$GH_HTML_URL"
-      
+
+      - name: Echo variables
+        run: |
+          echo ${GH_TAG_NAME} "Github TAG Name"
+          echo {GH_TAG_NAME} "----"
+          
       - name: Checkout tools current repo
         uses: actions/checkout@v4
         with:
