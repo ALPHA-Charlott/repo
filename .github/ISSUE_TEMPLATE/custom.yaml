@@ -1,6 +1,5 @@
 ---
-name: 
-about: 'new-release'
+name: 'new-release'
 title: '{{ env.GH_REL }}'
 labels: ',needs-triage'
 assignees: ''
