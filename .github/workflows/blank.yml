@@ -42,10 +42,9 @@ jobs:
           repository: ALPHA-Charlott/repo
           
       - name: make sure there is no current repo
-        uses: actions/checkout@v4
-        with:
-          repository: ALPHA-Charlott/repo
-      - name: |
+        env:
+          REPO: ALPHA-Charlott/repo
+        run: |
           function is_in_remote() {
               local branch=${1}
               local existed_in_remote=$(git ls-remote --heads origin ${branch})
