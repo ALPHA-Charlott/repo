@@ -67,22 +67,43 @@ jobs:
           labels: RELEASE_SYNC
           body: |
             ## Merging new release into local repository
-            
+        ##
       - name: checkout latest release(tag)
         uses: actions/checkout@v4
         with:
           repository: ${{ vars.REMOTE_REPO }}
-          ref: 'V0.0.1'
-            
-      - name: Create Pull Request
-        id: cpr
-        uses: peter-evans/create-pull-request@v7
-        
-      - name: Check outputs
-        if: ${{ steps.cpr.outputs.pull-request-number }}
+          ref: "refs/tags/${{ steps.get_latest_release.outputs.GH_TAG_NAME }}"
+          
+      # Step 3: Make any changes you want her  Commit the changes (if any)
+      - name: Create a new branch from checked-out commit
         run: |
-          echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
-          echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
+          git checkout -b new-release
+          git add .
+          git commit -m "NEW Release ${{ steps.get_latest_release.outputs.GH_TAG_NAME }}"
+          git push origin new-release
+          
+          
+      # - name: Create Pull Request
+      #   id: cpr
+      #   uses: peter-evans/create-pull-request@v7
+
+
+        
+      # - name: checkout latest release(tag)
+      #   uses: actions/checkout@v4
+      #   with:
+      #     repository: ${{ vars.REMOTE_REPO }}
+      #     ref: 'V0.0.1'
+            
+      # - name: Create Pull Request
+      #   id: cpr
+      #   uses: peter-evans/create-pull-request@v7
+        
+      # - name: Check outputs
+      #   if: ${{ steps.cpr.outputs.pull-request-number }}
+      #   run: |
+      #     echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
+      #     echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
           
       # - name: Parse Nested Field with jq
       #   id: parse_field
