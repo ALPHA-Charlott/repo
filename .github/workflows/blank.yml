@@ -61,8 +61,8 @@ jobs:
           token: ${{ secrets.API_TOKEN }}
           title: |
              failed during
-          # Auto-assign person who triggered the failure.
-          assignees: aa,bb
+            # Auto-assign person who triggered the failure.
+          assignees: ${{ github.actor }},${{ github.triggering_actor }}
           labels: CICD
           body: |
             ## Failure Report:
