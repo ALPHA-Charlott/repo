@@ -79,6 +79,7 @@ jobs:
         run: |
           ls -a
           git checkout -b new-feature-branch
+          git branch new-feature-branch -u origin/new-feature-branch
           git branch -vv
           
       # Step 3: Make any changes you want her  Commit the changes (if any)
