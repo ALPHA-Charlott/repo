@@ -2,6 +2,7 @@
 name: issue 
 description: File a bug report
 labels: "pull-request,triage"
+assignees: "j"
 body:
   - type: textarea
     id: what-happened
