@@ -56,7 +56,8 @@ jobs:
           echo ${{ steps.get_latest_release.outputs.GH_TAG_NAME }}
           echo ${{ steps.get_latest_release.outputs.GH_HTML_URL }}
           
-      - uses: dacbd/create-issue-action@main
+      - name: creating issues for track the merge request discussion
+        uses: dacbd/create-issue-action@main
         with:
           token: ${{ secrets.API_TOKEN }}
           title: |
@@ -66,8 +67,17 @@ jobs:
           labels: CICD
           body: |
             ## Failure Report:
-
             
+      - name: Create Pull Request
+        id: cpr
+        uses: peter-evans/create-pull-request@v7
+        
+      - name: Check outputs
+        if: ${{ steps.cpr.outputs.pull-request-number }}
+        run: |
+          echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
+          echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
+          
       # - name: Parse Nested Field with jq
       #   id: parse_field
       #   run: |
