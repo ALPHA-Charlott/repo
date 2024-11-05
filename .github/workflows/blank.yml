@@ -77,7 +77,7 @@ jobs:
       # Step 3: Make any changes you want her  Commit the changes (if any)
       - name: Create a new branch from checked-out commit
         run: |
-          git config --global user.name "$github_bot"
+          git config --global user.name "github_bot"
           git config --global user.email "bot@noreply.github.com"
           git checkout -b new-release
           git add .
