@@ -72,7 +72,7 @@ jobs:
       - name: checkout latest release(tag)
         uses: actions/checkout@v4
         with:
-          repository: ${{ REMOTE_REPO }}
+          repository: $REMOTE_REPO
           ref: 'V0.0.1'
             
       - name: Create Pull Request
