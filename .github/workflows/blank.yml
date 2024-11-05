@@ -79,7 +79,9 @@ jobs:
         run: |
           ls -a
           git checkout -b new-feature-branch
-          git branch new-feature-branch -u origin/new-feature-branch
+          git config --global user.name "github_bot"
+          git config --global user.email "bot@noreply.github.com"
+          git push -u origin refs/heads/new-feature-branch
           git branch -vv
           echo ":remote"
           git remote -v
