@@ -1,6 +1,6 @@
 ---
-name: custom
-about: why
+name: new-release
+about: ''
 title: ''
 labels: ''
 assignees: ''
