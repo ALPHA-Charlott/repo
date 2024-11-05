@@ -45,15 +45,15 @@ jobs:
           GH_HTML_URL=$(jq -r '.html_url' response.json)
           echo "Nested Field 1: $GH_TAG_NAME"
           echo "Nested Field 2: $GH_HTML_URL"
-          echo "::set-output name=GH_TAG_NAME::$GH_TAG_NAME"
-          # echo "GH_TAG_NAME=${GH_TAG_NAME}" >> $GITHUB_OUTPUT
-          # echo "GH_HTML_URL=${GH_HTML_URL}" >> $GITHUB_OUTPUT
-          echo "::set-output name=GH_HTML_URL::$GH_HTML_URL"
+          # echo "::set-output name=GH_TAG_NAME::$GH_TAG_NAME"
+          echo "GH_TAG_NAME=${{GH_TAG_NAME}}" >> $GITHUB_OUTPUT
+          echo "GH_HTML_URL=${{GH_HTML_URL}}" >> $GITHUB_OUTPUT
+
 
       - name: Echo variables
         run: |
           #echo ${GH_TAG_NAME} "Github TAG Name" ${GH_TAG_NAME}
-          echo GH_TAG_NAME "----" $GH_HTML_URL
+          echo GH_TAG_NAME "----" ${{GH_HTML_URL}}
           
       - name: Checkout tools current repo
         uses: actions/checkout@v4
