@@ -80,6 +80,7 @@ jobs:
           git checkout -b new-release
           git config --global user.name "github_bot"
           git config --global user.email "bot@noreply.github.com"
+          git push origin new-release
           # git remote add upstream https://github.com/ALPHA-Charlott/azure-monitor-baseline-alerts.git
           # git commit -m "NEW Release ${{ steps.get_latest_release.outputs.GH_TAG_NAME }}"
           # git push origin new-release
