@@ -33,13 +33,36 @@ jobs:
                   echo 1
               fi
           }
-          response=$(curl -L -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.API_TOKEN }}" -H "X-GitHub-Api-Version: 2022-11-28" https://api.github.com/repos/${TARGET_REPO}/releases)
-          echo "::set-output name=release::$response"
+          response=$(curl -L -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.API_TOKEN }}" -H "X-GitHub-Api-Version: 2022-11-28" https://api.github.com/repos/${TARGET_REPO}/releases/latest)
+          #echo "::set-output name=release::$response"
+          echo "$response" > response.json
+
+      - name: Parse Nested Field with jq
+        id: parse_field
+        run: |
+          # Use jq to access the nested field, replacing 'outerField.nestedField' with your actual path
+          GH_TAG_NAME=$(jq -r '.tag_name' response.json)
+          GH_HTML_URL=$(jq -r '.html_url' response.json)
+          echo "Nested Field: $GH_TAG_NAME GH_HTML_URL"
+          echo "::set-output name=GH_TAG_NAME::$GH_TAG_NAME"
+          echo "::set-output name=GH_HTML_URL::$GH_HTML_URL"
       
       - name: Checkout tools current repo
         uses: actions/checkout@v4
         with:
           repository: ALPHA-Charlott/repo
+          token: ${{ secrets.API_TOKEN }}
+  
+      - name: Fetch Specific Tag from Remote Repository
+        run: |
+          git remote add upstream https://github.com/ALPHA-Charlott/azure-monitor-baseline-alerts.git
+          git fetch upstream refs/tags/${{ github.event.inputs.tag_name }}:refs/tags/${{ github.event.inputs.tag_name }}
+
+      - name: Push Tag to Local Repository
+        run: |
+          git push origin refs/tags/${{ github.event.inputs.tag_name }}
+          
+          repository: 
           
       - name: make sure there is no current repo
         env:
