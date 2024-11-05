@@ -59,9 +59,15 @@ jobs:
       - uses: dacbd/create-issue-action@main
         with:
           token: ${{ secrets.API_TOKEN }}
-          title: Simple test issue
-          body: my new issue
-      
+          title: |
+             failed during
+          # Auto-assign person who triggered the failure.
+          assignees: aa,bb
+          labels: CICD
+          body: |
+            ## Failure Report:
+
+            
       # - name: Parse Nested Field with jq
       #   id: parse_field
       #   run: |
