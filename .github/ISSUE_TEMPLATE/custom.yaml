@@ -10,5 +10,6 @@ body:
   - type: textarea
     id: what-happened
     attributes:
+      label: "what is the cause"
       value: "A bug happened!"
 
