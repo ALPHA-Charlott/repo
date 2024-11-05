@@ -43,7 +43,7 @@ jobs:
           # Use jq to access the nested field, replacing 'outerField.nestedField' with your actual path
           GH_TAG_NAME=$(jq -r '.tag_name' response.json)
           GH_HTML_URL=$(jq -r '.html_url' response.json)
-          echo "Nested Field 1: $GH_TAG_NAME"
+          # echo "Nested Field 1: ${GH_TAG_NAME}"
           echo "Nested Field 2: $GH_HTML_URL"
           # echo "::set-output name=GH_TAG_NAME::$GH_TAG_NAME"
           # echo "GH_TAG_NAME=$GH_TAG_NAME" >> $GITHUB_OUTPUT
