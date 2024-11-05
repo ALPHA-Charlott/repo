@@ -39,8 +39,14 @@ jobs:
           cat response.json
           GH_TAG_NAME=$(jq -r '.tag_name' response.json)
           GH_HTML_URL=$(jq -r '.html_url' response.json)
+          export GH_TAG_NAME=${GH_TAG_NAME}
+          export GH_HTML_URL=${GH_HTML_URL}
           echo "GH_TAG_NAME=$GH_TAG_NAME" >> $GITHUB_OUTPUT
 
+      - name: Parse Nested Field with jq
+        id: parse_field
+        run: |
+          echo $GH_TAG_NAME "GH_TAG_NAME >>>>"
       # - name: Parse Nested Field with jq
       #   id: parse_field
       #   run: |
