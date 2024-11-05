@@ -81,6 +81,8 @@ jobs:
           git checkout -b new-feature-branch
           git branch new-feature-branch -u origin/new-feature-branch
           git branch -vv
+          echo ":remote"
+          git remote -v
           
       # Step 3: Make any changes you want her  Commit the changes (if any)
       - name: Create a new branch from checked-out commit
