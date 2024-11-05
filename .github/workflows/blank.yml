@@ -78,9 +78,11 @@ jobs:
       - name: Create a new branch from checked-out commit
         run: |
           git checkout -b new-release-V0.0.2
+          git branch -vv
           git config --global user.name "github_bot"
           git config --global user.email "bot@noreply.github.com"
           git push -u origin refs/heads/new-release-V0.0.2
+
           
           # git remote add upstream https://github.com/ALPHA-Charlott/azure-monitor-baseline-alerts.git
           # git commit -m "NEW Release ${{ steps.get_latest_release.outputs.GH_TAG_NAME }}"
