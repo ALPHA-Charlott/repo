@@ -1,7 +1,7 @@
 ---
-name: issue {{ env.REL_TAG }}
+name: issue {{ env.GH_REL }}
 about: 'new-release'
-title: {{ env.REL_TAG }}
+title: {{ env.GH_REL }}
 labels: 'pull-request,needs-triage'
 assignees: ''
 
