@@ -46,7 +46,7 @@ jobs:
       - name: Parse Nested Field with jq
         id: parse_field
         run: |
-          echo $GH_TAG_NAME "GH_TAG_NAME >>>>"
+          echo "${{ env.GH_TAG_NAME }}" "GH_TAG_NAME >>>>"
       # - name: Parse Nested Field with jq
       #   id: parse_field
       #   run: |
