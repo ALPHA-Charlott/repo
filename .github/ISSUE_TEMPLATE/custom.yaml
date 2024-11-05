@@ -1,7 +1,6 @@
 ---
 name: issue 
-description: File a bug report.
-title: title 
+description: File a bug report
 labels: ["pull-request", "triage"]
 body:
   - type: textarea
