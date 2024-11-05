@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Get latest release
-        id: get_release
+        id: get_latest_release
         env:
           TARGET_REPO: "ALPHA-Charlott/azure-monitor-baseline-alerts"  # Replace with the public repo owner and name
         run: |
@@ -39,16 +39,18 @@ jobs:
           cat response.json
           GH_TAG_NAME=$(jq -r '.tag_name' response.json)
           GH_HTML_URL=$(jq -r '.html_url' response.json)
-          export GH_TAG_NAME=${GH_TAG_NAME}
-          echo ${GH_TAG_NAME}
-          export GH_HTML_URL=${GH_HTML_URL}
-          echo "GH_TAG_NAME=$GH_TAG_NAME" >> $GITHUB_OUTPUT
-          echo "DD" "${{ env.GH_TAG_NAME }}"
+          
+          echo "GH_TAG_NAME=${GH_TAG_NAME}" >> $GITHUB_OUTPUT
+          echo "GH_HTML_URL=${GH_HTML_URL}" >> $GITHUB_OUTPUT
+          echo "URL=${GH_HTML_URL}" >> $GITHUB_ENV
 
       - name: Parse Nested Field with jq
         id: parse_field
         run: |
-          echo "${{ env.GH_TAG_NAME }}" "GH_TAG_NAME >>>>"
+          echo "${{ env.URL }}" "HTML_URL >>>>"
+          echo ${{ steps.get_latest_release.outputs.GH_TAG_NAME }}
+          echo ${{ steps.get_latest_release.outputs.GH_HTML_URL }}
+          
       # - name: Parse Nested Field with jq
       #   id: parse_field
       #   run: |
