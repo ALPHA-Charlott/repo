@@ -41,6 +41,7 @@ jobs:
         id: parse_field
         run: |
           # Use jq to access the nested field, replacing 'outerField.nestedField' with your actual path
+          cat response.json
           GH_TAG_NAME=$(jq -r '.tag_name' response.json)
           GH_HTML_URL=$(jq -r '.html_url' response.json)
           # echo "Nested Field 1: ${GH_TAG_NAME}"
