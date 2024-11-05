@@ -36,19 +36,20 @@ jobs:
           response=$(curl -L -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.API_TOKEN }}" -H "X-GitHub-Api-Version: 2022-11-28" https://api.github.com/repos/${TARGET_REPO}/releases/latest)
           #echo "::set-output name=release::$response"
           echo "$response" > response.json
-
-      - name: Parse Nested Field with jq
-        id: parse_field
-        run: |
-          # Use jq to access the nested field, replacing 'outerField.nestedField' with your actual path
           cat response.json
-          # GH_TAG_NAME=$(jq -r '.tag_name' response.json)
-          # GH_HTML_URL=$(jq -r '.html_url' response.json)
-          # # echo "Nested Field 1: ${GH_TAG_NAME}"
-          echo "Nested Field 2: $GH_HTML_URL"
-          # echo "::set-output name=GH_TAG_NAME::$GH_TAG_NAME"
-          # echo "GH_TAG_NAME=$GH_TAG_NAME" >> $GITHUB_OUTPUT
-          # echo "GH_HTML_URL=${{ GH_HTML_URL }}" >> $GITHUB_OUTPUT
+
+      # - name: Parse Nested Field with jq
+      #   id: parse_field
+      #   run: |
+      #     # Use jq to access the nested field, replacing 'outerField.nestedField' with your actual path
+      #     cat response.json
+      #     # GH_TAG_NAME=$(jq -r '.tag_name' response.json)
+      #     # GH_HTML_URL=$(jq -r '.html_url' response.json)
+      #     # # echo "Nested Field 1: ${GH_TAG_NAME}"
+      #     echo "Nested Field 2: $GH_HTML_URL"
+      #     # echo "::set-output name=GH_TAG_NAME::$GH_TAG_NAME"
+      #     # echo "GH_TAG_NAME=$GH_TAG_NAME" >> $GITHUB_OUTPUT
+      #     # echo "GH_HTML_URL=${{ GH_HTML_URL }}" >> $GITHUB_OUTPUT
           
       - name: Checkout tools current repo
         uses: actions/checkout@v4
