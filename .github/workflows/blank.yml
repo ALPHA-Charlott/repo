@@ -1,7 +1,8 @@
 # This is a basic workflow to help you get started with Actions
 
 name: NewReleaseCheckout
-
+env:
+  REMOTE_REPO: Monday
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
@@ -64,9 +65,15 @@ jobs:
              failed during
             # Auto-assign person who triggered the failure.
           assignees: ${{ github.actor }},${{ github.triggering_actor }}
-          labels: CICD
+          labels: RELEASE_SYNC
           body: |
-            ## Failure Report:
+            ## Merging new release into local repository
+            
+      - name: checkout latest release(tag)
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ vars.REMOTE_REPO }}
+          ref: 'V0.0.1'
             
       - name: Create Pull Request
         id: cpr
