@@ -56,11 +56,11 @@ jobs:
           echo ${{ steps.get_latest_release.outputs.GH_TAG_NAME }}
           echo ${{ steps.get_latest_release.outputs.GH_HTML_URL }}
           
-      - uses: JasonEtco/create-an-issue@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: dacbd/create-issue-action@main
         with:
-          filename: .github/ISSUE_TEMPLATE/custom.yaml
+          token: ${{ secrets.API_TOKEN }}
+          title: Simple test issue
+          body: my new issue
       
       # - name: Parse Nested Field with jq
       #   id: parse_field
