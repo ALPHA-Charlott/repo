@@ -18,6 +18,13 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     steps:
+    
+      - name: Checkout tools current repo
+        uses: actions/checkout@v4
+        with:
+          repository: ALPHA-Charlott/repo
+          token: ${{ secrets.API_TOKEN }}
+          
       - name: Get latest release
         id: get_latest_release
         env:
@@ -34,15 +41,13 @@ jobs:
               fi
           }
           response=$(curl -L -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.API_TOKEN }}" -H "X-GitHub-Api-Version: 2022-11-28" https://api.github.com/repos/${TARGET_REPO}/releases/latest)
-          #echo "::set-output name=release::$response"
           echo "$response" > response.json
-          cat response.json
           GH_TAG_NAME=$(jq -r '.tag_name' response.json)
           GH_HTML_URL=$(jq -r '.html_url' response.json)
-          
           echo "GH_TAG_NAME=${GH_TAG_NAME}" >> $GITHUB_OUTPUT
           echo "GH_HTML_URL=${GH_HTML_URL}" >> $GITHUB_OUTPUT
-          echo "URL=${GH_HTML_URL}" >> $GITHUB_ENV
+          echo "GH_REL=${GH_TAG_NAME}" >> $GITHUB_ENV
+          echo "GH_REL_URL=${GH_HTML_URL}" >> $GITHUB_ENV
 
       - name: Parse Nested Field with jq
         id: parse_field
@@ -50,6 +55,10 @@ jobs:
           echo "${{ env.URL }}" "HTML_URL >>>>"
           echo ${{ steps.get_latest_release.outputs.GH_TAG_NAME }}
           echo ${{ steps.get_latest_release.outputs.GH_HTML_URL }}
+          
+      - uses: JasonEtco/create-an-issue@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.API_TOKEN }}
           
       # - name: Parse Nested Field with jq
       #   id: parse_field
@@ -64,11 +73,7 @@ jobs:
       #     # echo "GH_TAG_NAME=$GH_TAG_NAME" >> $GITHUB_OUTPUT
       #     # echo "GH_HTML_URL=${{ GH_HTML_URL }}" >> $GITHUB_OUTPUT
           
-      - name: Checkout tools current repo
-        uses: actions/checkout@v4
-        with:
-          repository: ALPHA-Charlott/repo
-          token: ${{ secrets.API_TOKEN }}
+
   
       # - name: Fetch Specific Tag from Remote Repository
       #   run: |
