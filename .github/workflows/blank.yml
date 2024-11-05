@@ -46,8 +46,8 @@ jobs:
           echo "Nested Field 1: $GH_TAG_NAME"
           echo "Nested Field 2: $GH_HTML_URL"
           # echo "::set-output name=GH_TAG_NAME::$GH_TAG_NAME"
-          echo "GH_TAG_NAME=$GH_TAG_NAME" >> $GITHUB_OUTPUT
-          echo "GH_HTML_URL=${{ GH_HTML_URL }}" >> $GITHUB_OUTPUT
+          # echo "GH_TAG_NAME=$GH_TAG_NAME" >> $GITHUB_OUTPUT
+          # echo "GH_HTML_URL=${{ GH_HTML_URL }}" >> $GITHUB_OUTPUT
           
       - name: Checkout tools current repo
         uses: actions/checkout@v4
