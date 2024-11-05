@@ -1,7 +1,4 @@
 ---
-name: 'new-release'
-title: '{{ env.GH_REL }}'
-labels: ',needs-triage'
 name: issue {{ env.GH_REL }}
 description: File a bug report.
 title: "{{ env.GH_REL }} "
