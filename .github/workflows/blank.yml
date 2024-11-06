@@ -69,23 +69,24 @@ jobs:
           labels: RELEASE_SYNC
           body: |
             ## Merging new release into local repository
-        ##
-      - name: checkout latest release(tag)
-        uses: actions/checkout@v4
-        with:
-          repository: ${{ vars.REMOTE_REPO }}
-          ref: "refs/tags/${{ steps.get_latest_release.outputs.GH_TAG_NAME }}"
+      ##
+      # - name: checkout latest release(tag)
+      #   uses: actions/checkout@v4
+      #   with:
+      #     repository: ${{ vars.REMOTE_REPO }}
+      #     ref: "refs/tags/${{ steps.get_latest_release.outputs.GH_TAG_NAME }}"
           
       # Step 2: Create a new branch (or use an existing one) for the PR
       - name: Create a new branch from checked-out commit
         run: |
-          git fetch --tags origin
+          git remote add upstream https://github.com/ALPHA-Charlott/repo.git
+          git fetch --tags upstream
           git checkout V0.0.1 -b REL-V0.0.1
-          git branch -v
-          git remote add local https://x-access-token:${{ secrets.API_TOKEN }}@github.com/ALPHA-Charlott/repo.git
           git remote -v
-          git push -u local REL-V0.0.1
-          
+          git branch -vv
+          # git push -u origin REL-V0.0.1          
+          # git remote add local https://x-access-token:${{ secrets.API_TOKEN }}@github.com/ALPHA-Charlott/repo.git
+
           # git config --global user.name "github_bot"
           # git config --global user.email "bot@noreply.github.com"
           # git push -u origin refs/heads/new-feature-branch
