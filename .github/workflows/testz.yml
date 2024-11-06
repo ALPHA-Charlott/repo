@@ -63,9 +63,11 @@ jobs:
   job02:
     name: code operation
     needs: [release_check]
+    if: |
+      needs.release_check.outputs.next_step == "continue"
     runs-on: ubuntu-latest
     steps:
     - name: the rest jobs
       run: |
-        echo  ${needs.release_check.outputs.next_step}
+        echo  "next_step flag:" ${{ needs.release_check.outputs.next_step }}
         echo "run the rest jobs"
