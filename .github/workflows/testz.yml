@@ -51,9 +51,9 @@ jobs:
           # latest=$(get_latest_release)
           # match=$(is_within_branches REL-$latest)
           if [[ $match == '0' ]]; then
-            echo "continue"
+            echo "skipped"
           else
-            echo "skipped" 
+            echo "continue" 
           fi
 
   job02:
