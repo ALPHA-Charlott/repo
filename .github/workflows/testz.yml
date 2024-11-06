@@ -11,53 +11,50 @@ jobs:
     outputs:
       next_step: ${{ steps.get_latest_release.outputs.result }}
     steps:
-
-      - name: Checkout tools current repo
+      - name: Checkout current repo
         uses: actions/checkout@v4
         with:
           fetch-depth: 2
-          repository: ALPHA-Charlott/repo
           token: ${{ secrets.API_TOKEN }}
-
-      - name: Get latest release
+          sparse-checkout: |
+            .github
+            
+      - name: check if a new release exists 
         id: get_latest_release
         env:
           TARGET_REPO: "ALPHA-Charlott/azure-monitor-baseline-alerts"  # Replace with the public repo owner and name
         run: |
-          set -x
-          # function is_within_branches() {
-          #   #echo $0 $1
-          #   git ls-remote --exit-code --heads origin $1 >/dev/null
-          #   EXIT_CODE=$?
+          # set -x
+          function is_within_branches() {
+            git ls-remote --exit-code --heads origin $1 >/dev/null
+            EXIT_CODE=$?
           
-          #   if [[ $EXIT_CODE == '0' ]]; then
-          # 	  echo 0
-          #   else
-          # 	  echo 1
-          #   fi
-          # }
+            if [[ $EXIT_CODE == '0' ]]; then
+          	  echo 0
+            else
+          	  echo 1
+            fi
+          }
           
-          # function get_latest_release() {
-          #   local response=$(curl -s -L -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.API_TOKEN }}" -H "X-GitHub-Api-Version: 2022-11-28" https://api.github.com/repos/${TARGET_REPO}/releases/latest)
-          #   echo "$response" > response.json
+          function get_latest_release() {
+            local response=$(curl -s -L -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.API_TOKEN }}" -H "X-GitHub-Api-Version: 2022-11-28" https://api.github.com/repos/${TARGET_REPO}/releases/latest)
+            echo "$response" > response.json
           
-          #   GH_TAG_NAME=$(jq -r '.tag_name' response.json)
-          #   GH_HTML_URL=$(jq -r '.html_url' response.json)
-          #   # echo $GH_TAG_NAME, ">>", $GH_HTML_URL
-          #   echo "GH_TAG_NAME=${GH_TAG_NAME}" >> $GITHUB_OUTPUT
-          #   echo "GH_HTML_URL=${GH_HTML_URL}" >> $GITHUB_OUTPUT
+            GH_TAG_NAME=$(jq -r '.tag_name' response.json)
+            GH_HTML_URL=$(jq -r '.html_url' response.json)
+            # echo $GH_TAG_NAME, ">>", $GH_HTML_URL
+            echo "GH_TAG_NAME=${GH_TAG_NAME}" >> $GITHUB_OUTPUT
+            echo "GH_HTML_URL=${GH_HTML_URL}" >> $GITHUB_OUTPUT
+            echo $GH_TAG_NAME
+          }
           
-          #   echo $GH_TAG_NAME
-          # }
+          latest=$(get_latest_release)
+          match=$(is_within_branches REL-$latest)
           
-          # latest=$(get_latest_release)
-          # match=$(is_within_branches REL-$latest)
           if [[ $match == '0' ]]; then
             echo "result=skipped" >> $GITHUB_OUTPUT
-            echo "skipped"
           else
             echo "result=continue" >> $GITHUB_OUTPUT
-            echo "continue" 
           fi
 
   job02:
