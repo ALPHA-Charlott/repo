@@ -32,6 +32,7 @@ jobs:
         env:
           TARGET_REPO: "ALPHA-Charlott/azure-monitor-baseline-alerts"  # Replace with the public repo owner and name
         run: |
+          set -x
           function is_within_branches() {
             #echo $0 $1
             git ls-remote --exit-code --heads origin $1 >/dev/null
@@ -51,8 +52,8 @@ jobs:
             GH_TAG_NAME=$(jq -r '.tag_name' response.json)
             GH_HTML_URL=$(jq -r '.html_url' response.json)
             echo $GH_HTML_URL
-            #echo "GH_TAG_NAME=${GH_TAG_NAME}" >> $GITHUB_OUTPUT
-            #echo "GH_HTML_URL=${GH_HTML_URL}" >> $GITHUB_OUTPUT
+            echo "GH_TAG_NAME=${GH_TAG_NAME}" >> $GITHUB_OUTPUT
+            echo "GH_HTML_URL=${GH_HTML_URL}" >> $GITHUB_OUTPUT
           
             echo $GH_TAG_NAME
           }
@@ -60,7 +61,7 @@ jobs:
           latest=$(get_latest_release)
           match=$(is_within_branches REL-$latest)
           if [[ $match == '0' ]]; then
-            echo exit 0
+            exit 0
           else
             echo "A new release is found" 
           fi
