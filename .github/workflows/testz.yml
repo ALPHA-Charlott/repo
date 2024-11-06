@@ -8,6 +8,8 @@ jobs:
   release_check:
     name: release_checker
     runs-on: ubuntu-latest
+    outputs:
+      next_step: ${{ steps.get_latest_release.outputs.result }}
     steps:
 
       - name: Checkout tools current repo
@@ -65,5 +67,5 @@ jobs:
     steps:
     - name: the rest jobs
       run: |
-        echo  ${needs.release_check.outputs.result}
+        echo  ${needs.release_check.outputs.next_step}
         echo "run the rest jobs"
