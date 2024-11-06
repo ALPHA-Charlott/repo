@@ -77,14 +77,17 @@ jobs:
       # Step 2: Create a new branch (or use an existing one) for the PR
       - name: Create a new branch from checked-out commit
         run: |
-          ls -a
-          git checkout -b new-feature-branch
+          git fetch --tags origin
+          git checkout V0.0.1 -b REL-V0.0.1
+          git remote add local https://github.com/ALPHA-Charlott/repo.git
+          git push -u local REL-V0.0.1
+          
           # git config --global user.name "github_bot"
           # git config --global user.email "bot@noreply.github.com"
           # git push -u origin refs/heads/new-feature-branch
           # git branch -vv
           echo ":remote ============"
-          git remote -v
+          git branch -r
           
       # # Step 3: Make any changes you want her  Commit the changes (if any)
       # - name: Create a new branch from checked-out commit
