@@ -54,8 +54,9 @@ jobs:
               
               echo $GH_TAG_NAME
           }
-          
-          last_release = $(get_latest_release)
+
+          echo "START"
+          last_release=$(get_latest_release)
           echo $last_release
           # echo "GH_REL=${GH_TAG_NAME}" >> $GITHUB_ENV
           # echo "GH_REL_URL=${GH_HTML_URL}" >> $GITHUB_ENV
