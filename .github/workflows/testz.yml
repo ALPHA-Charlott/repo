@@ -1,0 +1,20 @@
+jobs:
+  job01:
+    name: Job 01
+    runs-on: ubuntu-latest
+    outputs:
+      run_rest_jobs: ${{ steps.set_output.outputs.run_jobs }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+      - name: git diff and set output
+        id: set_output
+        run: |
+          codeChanges="only within certain files"
+          if [[$codeChanges == "only within certain files"]]; then
+            echo "::set-output name=run_jobs::true"
+          else
+            echo "::set-output name=run_jobs::false"
+          fi
