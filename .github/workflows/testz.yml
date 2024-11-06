@@ -64,7 +64,7 @@ jobs:
     name: code operation
     needs: [release_check]
     if: |
-      needs.release_check.outputs.next_step == "continue"
+      needs.release_check.outputs.next_step == 'continue'
     runs-on: ubuntu-latest
     steps:
     - name: the rest jobs
