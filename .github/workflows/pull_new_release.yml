@@ -6,7 +6,7 @@ name: PullNewRelease
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
   schedule:
-    - cron: '*/3 * * * *'  # Runs every 30 minutes
+    - cron: '*/30 * * * *'  # Runs every 30 minutes
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -32,7 +32,7 @@ jobs:
         env:
           TARGET_REPO: "ALPHA-Charlott/azure-monitor-baseline-alerts"  # Replace with the public repo owner and name
         run: |
-          function is_in_remote() {
+          function is_within_branches() {
               local branch=${1}
               local existed_in_remote=$(git ls-remote --heads origin ${branch})
 
@@ -42,14 +42,28 @@ jobs:
                   echo 1
               fi
           }
-          response=$(curl -L -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.API_TOKEN }}" -H "X-GitHub-Api-Version: 2022-11-28" https://api.github.com/repos/${TARGET_REPO}/releases/latest)
-          echo "$response" > response.json
-          GH_TAG_NAME=$(jq -r '.tag_name' response.json)
-          GH_HTML_URL=$(jq -r '.html_url' response.json)
-          echo "GH_TAG_NAME=${GH_TAG_NAME}" >> $GITHUB_OUTPUT
-          echo "GH_HTML_URL=${GH_HTML_URL}" >> $GITHUB_OUTPUT
-          echo "GH_REL=${GH_TAG_NAME}" >> $GITHUB_ENV
-          echo "GH_REL_URL=${GH_HTML_URL}" >> $GITHUB_ENV
+          
+          function get_latest_release() {
+              local response=$(curl -L -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.API_TOKEN }}" -H "X-GitHub-Api-Version: 2022-11-28" https://api.github.com/repos/${TARGET_REPO}/releases/latest)
+              echo "$response" > response.json
+              
+              GH_TAG_NAME=$(jq -r '.tag_name' response.json)
+              GH_HTML_URL=$(jq -r '.html_url' response.json)
+              echo "GH_TAG_NAME=${GH_TAG_NAME}" >> $GITHUB_OUTPUT
+              echo "GH_HTML_URL=${GH_HTML_URL}" >> $GITHUB_OUTPUT
+              
+              echo $GH_TAG_NAME
+          }
+          
+          last_release = $(get_latest_release())
+          echo $last_release
+          # echo "GH_REL=${GH_TAG_NAME}" >> $GITHUB_ENV
+          # echo "GH_REL_URL=${GH_HTML_URL}" >> $GITHUB_ENV
+          
+          if [[ -z is_within_branches(${last_release}) ]]; then
+            echo "Found" ${GH_TAG_NAME}
+            exit 0;
+          fi
 
       - name: Parse Nested Field with jq
         id: parse_field
