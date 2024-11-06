@@ -65,5 +65,5 @@ jobs:
     steps:
     - name: the rest jobs
       run: |
-        echo  needs.release_check.outputs.result
+        echo  ${needs.release_check.outputs.result}
         echo "run the rest jobs"
