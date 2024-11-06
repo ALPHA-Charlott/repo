@@ -129,7 +129,7 @@ jobs:
         run: |
           gh repo set-default ALPHA-Charlott/repo
           gh pr list
-          gh pr create -B main -H REL-V0.0.1 --title 'Merge branch_to_merge into base_branch' --body 'Created by Github action'
+          gh pr create -B main -H REL-V0.0.1 --title 'Merge new release' --body 'This pull request import releases from trusted sources.'
         env:
           GITHUB_TOKEN: ${{ secrets.API_TOKEN }}
       #     ls -a
