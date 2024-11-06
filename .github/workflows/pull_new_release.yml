@@ -130,14 +130,14 @@ jobs:
           gh repo set-default ALPHA-Charlott/repo
           gh pr list
           gh pr create -B main -H REL-V0.0.1 --title 'Merge branch_to_merge into base_branch' --body 'Created by Github action'
-          
+        env:
+          GITHUB_TOKEN: ${{ secrets.API_TOKEN }}
       #     ls -a
       #     git remote -v
       #     gh auth token | cut -c 10-32
       #     gh pr list
       #     gh pr create -B main -H REL-V0.0.1 --title 'Merge branch_to_merge into base_branch' --body 'Created by Github action'
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.API_TOKEN }}
+
 
           # token: ${{ secrets.API_TOKEN }}
           # base: main  # Or the branch you want to merge into in the original repository
