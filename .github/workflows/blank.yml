@@ -118,9 +118,15 @@ jobs:
         id: cpr
         uses: peter-evans/create-pull-request@v7
         with:
-          token: ${{ secrets.API_TOKEN }}
-          base: main  # Or the branch you want to merge into in the original repository
-          branch: REL-V0.0.1  # The source branch from the other repository (the one you checked out)
+          title: "New Feature: Add new file"
+          body: "This pull request adds a new file to the project."
+          base: main  # The target branch of the PR (usually 'main' or 'develop')
+          head: REL-V0.0.1  # The source branch (the one you just pushed)
+          draft: true  # Set to 'true' if you want the PR to be in draft mode
+          
+          # token: ${{ secrets.API_TOKEN }}
+          # base: main  # Or the branch you want to merge into in the original repository
+          # branch: REL-V0.0.1  # The source branch from the other repository (the one you checked out)
           # title: 'Your PR Title'
           # body: 'Description of the changes made in this PR'
           
