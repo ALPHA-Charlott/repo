@@ -53,8 +53,10 @@ jobs:
           
           if [[ $match == '0' ]]; then
             echo "result=skipped" >> $GITHUB_OUTPUT
+            echo "result=skipped"
           else
             echo "result=continue" >> $GITHUB_OUTPUT
+            echo "result=continue"
           fi
 
   job02:
