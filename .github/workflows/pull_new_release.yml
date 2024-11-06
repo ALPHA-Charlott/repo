@@ -51,7 +51,7 @@ jobs:
           
             GH_TAG_NAME=$(jq -r '.tag_name' response.json)
             GH_HTML_URL=$(jq -r '.html_url' response.json)
-            echo $GH_TAG_NAME, ">>", $GH_HTML_URL
+            # echo $GH_TAG_NAME, ">>", $GH_HTML_URL
             echo "GH_TAG_NAME=${GH_TAG_NAME}" >> $GITHUB_OUTPUT
             echo "GH_HTML_URL=${GH_HTML_URL}" >> $GITHUB_OUTPUT
           
