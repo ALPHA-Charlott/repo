@@ -51,16 +51,16 @@ jobs:
           # latest=$(get_latest_release)
           # match=$(is_within_branches REL-$latest)
           if [[ $match == '0' ]]; then
-            echo "run_rest_jobs=false" >> $GITHUB_OUTPUT
+            echo "continue"
           else
-            echo "run_rest_jobs=true" >> $GITHUB_OUTPUT
-            echo "A new release is found" 
+            echo "skipped" 
           fi
 
   job02:
     name: code operation
     needs: [release_check]
-    # if: needs.release_check.outputs.run_rest_jobs == 'true'
+    if: |
+      needs.release_check.result == 'continue'
     runs-on: ubuntu-latest
     steps:
     - name: the rest jobs
