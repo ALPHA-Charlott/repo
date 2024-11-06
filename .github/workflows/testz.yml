@@ -51,18 +51,19 @@ jobs:
           # latest=$(get_latest_release)
           # match=$(is_within_branches REL-$latest)
           if [[ $match == '0' ]]; then
+            echo "result=skipped" >> $GITHUB_OUTPUT
             echo "skipped"
           else
+            echo "result=continue" >> $GITHUB_OUTPUT
             echo "continue" 
           fi
 
   job02:
     name: code operation
     needs: [release_check]
-    if: |
-      needs.release_check.result == 'continue'
     runs-on: ubuntu-latest
     steps:
     - name: the rest jobs
       run: |
+        echo  needs.release_check.outputs.result
         echo "run the rest jobs"
