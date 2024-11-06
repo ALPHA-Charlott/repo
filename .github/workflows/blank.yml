@@ -84,7 +84,7 @@ jobs:
           git checkout V0.0.1 -b REL-V0.0.1
           git remote -v
           git branch -vv
-          # git push -u origin REL-V0.0.1          
+          git push -u origin REL-V0.0.1
           # git remote add local https://x-access-token:${{ secrets.API_TOKEN }}@github.com/ALPHA-Charlott/repo.git
 
           # git config --global user.name "github_bot"
