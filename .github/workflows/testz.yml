@@ -5,30 +5,62 @@ on:
   workflow_dispatch: {}
 
 jobs:
-  job01:
-    name: Job 01
+  release_check:
+    name: release_checker
     runs-on: ubuntu-latest
-    outputs:
-      run_rest_jobs: ${{ steps.set_output.outputs.run_jobs }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+
+      - name: Checkout tools current repo
+        uses: actions/checkout@v4
         with:
           fetch-depth: 2
-      - name: git diff and set output
-        id: set_output
+          repository: ALPHA-Charlott/repo
+          token: ${{ secrets.API_TOKEN }}
+
+      - name: Get latest release
+        id: get_latest_release
+        env:
+          TARGET_REPO: "ALPHA-Charlott/azure-monitor-baseline-alerts"  # Replace with the public repo owner and name
         run: |
-          codeChanges="only within certain files xx"
-          if [[$codeChanges == "only within certain files"]]; then
-            echo "::set-output name=run_jobs::true"
+          set -x
+          # function is_within_branches() {
+          #   #echo $0 $1
+          #   git ls-remote --exit-code --heads origin $1 >/dev/null
+          #   EXIT_CODE=$?
+          
+          #   if [[ $EXIT_CODE == '0' ]]; then
+          # 	  echo 0
+          #   else
+          # 	  echo 1
+          #   fi
+          # }
+          
+          # function get_latest_release() {
+          #   local response=$(curl -s -L -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.API_TOKEN }}" -H "X-GitHub-Api-Version: 2022-11-28" https://api.github.com/repos/${TARGET_REPO}/releases/latest)
+          #   echo "$response" > response.json
+          
+          #   GH_TAG_NAME=$(jq -r '.tag_name' response.json)
+          #   GH_HTML_URL=$(jq -r '.html_url' response.json)
+          #   # echo $GH_TAG_NAME, ">>", $GH_HTML_URL
+          #   echo "GH_TAG_NAME=${GH_TAG_NAME}" >> $GITHUB_OUTPUT
+          #   echo "GH_HTML_URL=${GH_HTML_URL}" >> $GITHUB_OUTPUT
+          
+          #   echo $GH_TAG_NAME
+          # }
+          
+          # latest=$(get_latest_release)
+          # match=$(is_within_branches REL-$latest)
+          if [[ $match == '0' ]]; then
+            echo "run_rest_jobs=false" >> $GITHUB_OUTPUT
           else
-            echo "::set-output name=run_jobs::false"
+            echo "run_rest_jobs=true" >> $GITHUB_OUTPUT
+            echo "A new release is found" 
           fi
 
   job02:
-    name: Job 02
-    needs: [job01]
-    if: needs.job01.outputs.run_rest_jobs == 'true'
+    name: code operation
+    needs: [release_check]
+    if: needs.release_check.outputs.run_rest_jobs == 'true'
     runs-on: ubuntu-latest
     steps:
     - name: the rest jobs
