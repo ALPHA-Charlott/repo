@@ -122,7 +122,7 @@ jobs:
           title: "New Release from Upstream repo"
           body: "This pull request import updates from upstream sources."
           base: main  # Target branch for the PR
-          head: REL-V0.0.1  # Source branch for the PR
+          branch: REL-V0.0.1  # Source branch for the PR
           draft: false  # Set to true if you want to create a draft PR
           
       # - name: Create Pull Request
