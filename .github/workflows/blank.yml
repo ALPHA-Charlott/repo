@@ -120,9 +120,9 @@ jobs:
         with:
           token: ${{ secrets.API_TOKEN }}
           base: main  # Or the branch you want to merge into in the original repository
-          head: REL-V0.0.1  # The source branch from the other repository (the one you checked out)
-          title: 'Your PR Title'
-          body: 'Description of the changes made in this PR'
+          branch: REL-V0.0.1  # The source branch from the other repository (the one you checked out)
+          # title: 'Your PR Title'
+          # body: 'Description of the changes made in this PR'
           
       # - name: Create Pull Request
       #   id: cpr
