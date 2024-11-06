@@ -33,38 +33,36 @@ jobs:
           TARGET_REPO: "ALPHA-Charlott/azure-monitor-baseline-alerts"  # Replace with the public repo owner and name
         run: |
           function is_within_branches() {
-              local branch=${1}
-              local existed_in_remote=$(git ls-remote --heads origin ${branch})
-
-              if [[ -z ${existed_in_remote} ]]; then
-                  echo 0
-              else
-                  echo 1
-              fi
+            #echo $0 $1
+            git ls-remote --exit-code --heads origin $1 >/dev/null
+            EXIT_CODE=$?
+          
+            if [[ $EXIT_CODE == '0' ]]; then
+          	  echo 0
+            else
+          	  echo 1
+            fi
           }
-          is_within_branches 22
           
           function get_latest_release() {
-              local response=$(curl -L -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.API_TOKEN }}" -H "X-GitHub-Api-Version: 2022-11-28" https://api.github.com/repos/${TARGET_REPO}/releases/latest)
-              echo "$response" > response.json
-              
-              GH_TAG_NAME=$(jq -r '.tag_name' response.json)
-              GH_HTML_URL=$(jq -r '.html_url' response.json)
-              echo "GH_TAG_NAME=${GH_TAG_NAME}" >> $GITHUB_OUTPUT
-              echo "GH_HTML_URL=${GH_HTML_URL}" >> $GITHUB_OUTPUT
-              
-              echo $GH_TAG_NAME
-          }
-
-          echo "START"
-          last_release=$(get_latest_release)
-          echo $last_release
-          # echo "GH_REL=${GH_TAG_NAME}" >> $GITHUB_ENV
-          # echo "GH_REL_URL=${GH_HTML_URL}" >> $GITHUB_ENV
+            local response=$(curl -s -L -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.API_TOKEN }}" -H "X-GitHub-Api-Version: 2022-11-28" https://api.github.com/repos/${TARGET_REPO}/releases/latest)
+            echo "$response" > response.json
           
-          if [[ -z is_within_branches ${last_release} ]]; then
-            echo "Found" ${GH_TAG_NAME}
-            exit 0;
+            GH_TAG_NAME=$(jq -r '.tag_name' response.json)
+            GH_HTML_URL=$(jq -r '.html_url' response.json)
+            echo $GH_HTML_URL
+            #echo "GH_TAG_NAME=${GH_TAG_NAME}" >> $GITHUB_OUTPUT
+            #echo "GH_HTML_URL=${GH_HTML_URL}" >> $GITHUB_OUTPUT
+          
+            echo $GH_TAG_NAME
+          }
+          
+          latest=$(get_latest_release)
+          match=$(is_within_branches REL-$latest)
+          if [[ $match == '0' ]]; then
+            echo exit 0
+          else
+            echo "A new release is found" 
           fi
 
       - name: Parse Nested Field with jq
