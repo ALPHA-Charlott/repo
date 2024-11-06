@@ -82,7 +82,7 @@ jobs:
           git fetch --tags origin
           git checkout V0.0.1 -b REL-V0.0.1
           git branch -v
-          git remote add local https://github.com/ALPHA-Charlott/repo.git
+          git remote set-url local https://x-access-token:${{ secrets.API_TOKEN }}@github.com/ALPHA-Charlott/repo.git
           git push -u local REL-V0.0.1
           
           # git config --global user.name "github_bot"
