@@ -60,8 +60,9 @@ jobs:
   job02:
     name: code operation
     needs: [release_check]
-    if: needs.release_check.outputs.run_rest_jobs == 'true'
+    # if: needs.release_check.outputs.run_rest_jobs == 'true'
     runs-on: ubuntu-latest
     steps:
     - name: the rest jobs
-      run: echo "run the rest jobs"
+      run: |
+        echo "run the rest jobs"
