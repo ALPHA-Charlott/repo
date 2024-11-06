@@ -79,12 +79,12 @@ jobs:
       # Step 2: Create a new branch (or use an existing one) for the PR
       - name: Create a new branch from checked-out commit
         run: |
-          git remote add upstream https://github.com/ALPHA-Charlott/repo.git
+          git remote add upstream https://github.com/ALPHA-Charlott/azure-monitor-baseline-alerts.git
           git fetch --tags upstream
           git checkout V0.0.1 -b REL-V0.0.1
           git remote -v
           git branch -vv
-          git push -u origin REL-V0.0.1
+          # git push -u origin REL-V0.0.1
           # git remote add local https://x-access-token:${{ secrets.API_TOKEN }}@github.com/ALPHA-Charlott/repo.git
 
           # git config --global user.name "github_bot"
@@ -107,6 +107,12 @@ jobs:
           # git remote add upstream https://github.com/ALPHA-Charlott/azure-monitor-baseline-alerts.git
           # git commit -m "NEW Release ${{ steps.get_latest_release.outputs.GH_TAG_NAME }}"
           # git push origin new-release
+          
+      - name: Push new branch to remote using github-push-action
+        uses: ad-m/github-push-action@v0.6.0
+        with:
+          github_token: ${{ secrets.API_TOKEN }}
+          branch: REL-V0.0.1
           
       - name: Create Pull Request
         id: cpr
