@@ -81,12 +81,20 @@ jobs:
           repository: ALPHA-Charlott/repo
           token: ${{ secrets.API_TOKEN }}
 
-      # - name: Parse Nested Field with jq
-      #   id: parse_field
-      #   run: |
-      #     echo "${{ env.URL }}" "HTML_URL >>>>"
-      #     echo ${{ steps.get_latest_release.outputs.GH_TAG_NAME }}
-      #     echo ${{ steps.get_latest_release.outputs.GH_HTML_URL }}
+      - name: Checkout current repo
+        id: get_latest_release
+        run: |
+          echo "${{ needs.release_check.outputs.GH_TAG_NAME }}"
+          echo "${{ needs.release_check.outputs.GH_HTML_URL }}"
+          echo "GH_TAG_NAME=${{ needs.release_check.outputs.GH_TAG_NAME }}" >> $GITHUB_OUTPUT
+          echo "GH_HTML_URL=${{ needs.release_check.outputs.GH_HTML_URL }}" >> $GITHUB_OUTPUT
+        
+      - name: Parse Nested Field with jq
+        id: parse_field
+        run: |
+          echo "${{ env.URL }}" "HTML_URL >>>>"
+          echo ${{ steps.get_latest_release.outputs.GH_TAG_NAME }}
+          echo ${{ steps.get_latest_release.outputs.GH_HTML_URL }}
 
       # - name: creating issues for track the merge request discussion
       #   uses: dacbd/create-issue-action@main
