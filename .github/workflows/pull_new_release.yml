@@ -15,26 +15,26 @@ permissions:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  release_check:
+    name: release_checker
     runs-on: ubuntu-latest
+    outputs:
+      next_step: ${{ steps.get_latest_release.outputs.result }}
     steps:
-
-      - name: Checkout tools current repo
+      - name: Checkout current repo
         uses: actions/checkout@v4
         with:
-          repository: ALPHA-Charlott/repo
           token: ${{ secrets.API_TOKEN }}
-
-      - name: Get latest release
+          sparse-checkout: |
+            .github
+            
+      - name: check if a new release exists 
         id: get_latest_release
         env:
           TARGET_REPO: "ALPHA-Charlott/azure-monitor-baseline-alerts"  # Replace with the public repo owner and name
         run: |
-          set -x
+          # set -x
           function is_within_branches() {
-            #echo $0 $1
             git ls-remote --exit-code --heads origin $1 >/dev/null
             EXIT_CODE=$?
           
@@ -54,36 +54,51 @@ jobs:
             # echo $GH_TAG_NAME, ">>", $GH_HTML_URL
             echo "GH_TAG_NAME=${GH_TAG_NAME}" >> $GITHUB_OUTPUT
             echo "GH_HTML_URL=${GH_HTML_URL}" >> $GITHUB_OUTPUT
-          
             echo $GH_TAG_NAME
           }
           
           latest=$(get_latest_release)
           match=$(is_within_branches REL-$latest)
+          
           if [[ $match == '0' ]]; then
-            exit 0
+            echo "result=skipped" >> $GITHUB_OUTPUT
+            echo "result=skipped"
           else
-            echo "A new release is found" 
+            echo "result=continue" >> $GITHUB_OUTPUT
+            echo "result=continue"
           fi
-
-      - name: Parse Nested Field with jq
-        id: parse_field
-        run: |
-          echo "${{ env.URL }}" "HTML_URL >>>>"
-          echo ${{ steps.get_latest_release.outputs.GH_TAG_NAME }}
-          echo ${{ steps.get_latest_release.outputs.GH_HTML_URL }}
-
-      - name: creating issues for track the merge request discussion
-        uses: dacbd/create-issue-action@main
+          
+  # This workflow contains a few steps "submit Issue and PR"
+  submit_pr:
+    if: |
+      needs.release_check.outputs.next_step == 'continue'
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout current repo
+        uses: actions/checkout@v4
         with:
+          repository: ALPHA-Charlott/repo
           token: ${{ secrets.API_TOKEN }}
-          title: |
-             failed during
-            # Auto-assign person who triggered the failure.
-          assignees: ${{ github.actor }},${{ github.triggering_actor }}
-          labels: RELEASE_SYNC
-          body: |
-            ## Merging new release into local repository
+
+      # - name: Parse Nested Field with jq
+      #   id: parse_field
+      #   run: |
+      #     echo "${{ env.URL }}" "HTML_URL >>>>"
+      #     echo ${{ steps.get_latest_release.outputs.GH_TAG_NAME }}
+      #     echo ${{ steps.get_latest_release.outputs.GH_HTML_URL }}
+
+      # - name: creating issues for track the merge request discussion
+      #   uses: dacbd/create-issue-action@main
+      #   with:
+      #     token: ${{ secrets.API_TOKEN }}
+      #     title: |
+      #        failed during
+      #       # Auto-assign person who triggered the failure.
+      #     assignees: ${{ github.actor }},${{ github.triggering_actor }}
+      #     labels: RELEASE_SYNC
+      #     body: |
+      #       ## Merging new release into local repository
       ##
       # - name: checkout latest release(tag)
       #   uses: actions/checkout@v4
@@ -91,150 +106,3 @@ jobs:
       #     repository: ${{ vars.REMOTE_REPO }}
       #     ref: "refs/tags/${{ steps.get_latest_release.outputs.GH_TAG_NAME }}"
 
-      # Step 2: Create a new branch (or use an existing one) for the PR
-      - name: Create a new branch from checked-out commit
-        run: |
-          git remote add upstream https://github.com/ALPHA-Charlott/azure-monitor-baseline-alerts.git
-          git fetch --tags upstream
-          git checkout V0.0.1 -b REL-V0.0.1
-          git remote -v
-          git branch -vv
-          # git push -u origin REL-V0.0.1
-          # git remote add local https://x-access-token:${{ secrets.API_TOKEN }}@github.com/ALPHA-Charlott/repo.git
-
-          # git config --global user.name "github_bot"
-          # git config --global user.email "bot@noreply.github.com"
-          # git push -u origin refs/heads/new-feature-branch
-          # git branch -vv
-          echo ":remote ============"
-          git branch -r
-
-      # # Step 3: Make any changes you want her  Commit the changes (if any)
-      # - name: Create a new branch from checked-out commit
-      #   run: |
-      #     git checkout -b new-release-V0.0.2
-      #     git branch -vv
-      #     git config --global user.name "github_bot"
-      #     git config --global user.email "bot@noreply.github.com"
-      #     git push -u origin refs/heads/new-release-V0.0.2
-
-
-          # git remote add upstream https://github.com/ALPHA-Charlott/azure-monitor-baseline-alerts.git
-          # git commit -m "NEW Release ${{ steps.get_latest_release.outputs.GH_TAG_NAME }}"
-          # git push origin new-release
-
-      - name: Push new branch to remote using github-push-action
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.API_TOKEN }}
-          branch: REL-V0.0.1
-          
-      # - name: Create Pull Request
-      #   id: cpr
-      #   uses: peter-evans/create-pull-request@v7
-      #   with:
-      #     token: ${{ secrets.API_TOKEN }}
-      #     title: "New Release from Upstream repo"
-      #     body: "This pull request import updates from upstream sources."
-      #     base: main  # Target branch for the PR
-      #     branch: REL-V0.0.1  # Source branch for the PR
-      #     draft: false  # Set to true if you want to create a draft PR
-          
-      - name: Create Pull Request
-        run: |
-          gh repo set-default ALPHA-Charlott/repo
-          gh pr list
-          gh pr create -B main -H REL-V0.0.1 --title 'Merge new release' --body 'This pull request import releases from trusted sources.'
-        env:
-          GITHUB_TOKEN: ${{ secrets.API_TOKEN }}
-      #     ls -a
-      #     git remote -v
-      #     gh auth token | cut -c 10-32
-      #     gh pr list
-      #     gh pr create -B main -H REL-V0.0.1 --title 'Merge branch_to_merge into base_branch' --body 'Created by Github action'
-
-
-          # token: ${{ secrets.API_TOKEN }}
-          # base: main  # Or the branch you want to merge into in the original repository
-          # branch: REL-V0.0.1  # The source branch from the other repository (the one you checked out)
-          # title: 'Your PR Title'
-          # body: 'Description of the changes made in this PR'
-
-      # - name: Create Pull Request
-      #   id: cpr
-      #   uses: peter-evans/create-pull-request@v7
-
-
-
-      # - name: checkout latest release(tag)
-      #   uses: actions/checkout@v4
-      #   with:
-      #     repository: ${{ vars.REMOTE_REPO }}
-      #     ref: 'V0.0.1'
-
-      # - name: Create Pull Request
-      #   id: cpr
-      #   uses: peter-evans/create-pull-request@v7
-
-      # - name: Check outputs
-      #   if: ${{ steps.cpr.outputs.pull-request-number }}
-      #   run: |
-      #     echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
-      #     echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
-
-      # - name: Parse Nested Field with jq
-      #   id: parse_field
-      #   run: |
-      #     # Use jq to access the nested field, replacing 'outerField.nestedField' with your actual path
-      #     cat response.json
-      #     # GH_TAG_NAME=$(jq -r '.tag_name' response.json)
-      #     # GH_HTML_URL=$(jq -r '.html_url' response.json)
-      #     # # echo "Nested Field 1: ${GH_TAG_NAME}"
-      #     echo "Nested Field 2: $GH_HTML_URL"
-      #     # echo "::set-output name=GH_TAG_NAME::$GH_TAG_NAME"
-      #     # echo "GH_TAG_NAME=$GH_TAG_NAME" >> $GITHUB_OUTPUT
-      #     # echo "GH_HTML_URL=${{ GH_HTML_URL }}" >> $GITHUB_OUTPUT
-
-
-
-      # - name: Fetch Specific Tag from Remote Repository
-      #   run: |
-      #     git remote add upstream https://github.com/ALPHA-Charlott/azure-monitor-baseline-alerts.git
-      #     git fetch upstream refs/tags/${{ github.event.inputs.tag_name }}:refs/tags/${{ github.event.inputs.tag_name }}
-
-      # - name: Push Tag to Local Repository
-      #   run: |
-      #     git push origin refs/tags/${{ github.event.inputs.tag_name }}
-
-      #     repository:
-
-      # - name: make sure there is no current repo
-      #   env:
-      #     REPO: ALPHA-Charlott/repo
-      #   run: |
-      #     function is_in_remote() {
-      #         local branch=${1}
-      #         local existed_in_remote=$(git ls-remote --heads origin ${branch})
-
-      #         if [[ -z ${existed_in_remote} ]]; then
-      #             echo 0
-      #         else
-      #             echo 1
-      #         fi
-      #     }
-
-      # - name: Get latest release
-      #   id: get_release
-      #   env:
-      #     REPO: "owner/public-repo-name"  # Replace with the public repo owner and name
-      #   run: |
-      #     function is_in_remote() {
-      #         local branch=${1}
-      #         local existed_in_remote=$(git ls-remote --heads origin ${branch})
-
-      #         if [[ -z ${existed_in_remote} ]]; then
-      #             echo 0
-      #         else
-      #             echo 1
-      #         fi
-      #     }
