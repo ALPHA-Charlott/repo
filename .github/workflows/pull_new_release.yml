@@ -90,8 +90,8 @@ jobs:
           echo "${{ needs.release_check.outputs.NEXT_STEP }}"
           echo "${{ needs.release_check.outputs.GH_TAG_NAME }}"
           echo "${{ needs.release_check.outputs.GH_HTML_URL }}"
-          echo "GH_TAG_NAME=${{ needs.release_check.outputs.GH_TAG_NAME }}\n" >> $GITHUB_OUTPUT
-          echo "GH_HTML_URL=${{ needs.release_check.outputs.GH_HTML_URL }}\n" >> $GITHUB_OUTPUT
+          echo "GH_TAG_NAME=${{ needs.release_check.outputs.GH_TAG_NAME }}" >> $GITHUB_OUTPUT
+          echo "GH_HTML_URL=${{ needs.release_check.outputs.GH_HTML_URL }}" >> $GITHUB_OUTPUT
         
       - name: Parse Nested Field with jq
         id: parse_field
