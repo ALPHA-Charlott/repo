@@ -99,17 +99,19 @@ jobs:
           echo ${{ steps.get_latest_release2.outputs.GH_HTML_URL }}
           echo ${{ steps.get_latest_release2.outputs.GH_TAG_NAME }}
 
-      # - name: creating issues for track the merge request discussion
-      #   uses: dacbd/create-issue-action@main
-      #   with:
-      #     token: ${{ secrets.API_TOKEN }}
-      #     title: |
-      #        failed during
-      #       # Auto-assign person who triggered the failure.
-      #     assignees: ${{ github.actor }},${{ github.triggering_actor }}
-      #     labels: RELEASE_SYNC
-      #     body: |
-      #       ## Merging new release into local repository
+      - name: creating issues for track the merge request discussion
+        uses: dacbd/create-issue-action@main
+        with:
+          token: ${{ secrets.API_TOKEN }}
+          title: |
+             New release ${{ steps.get_latest_release2.outputs.GH_TAG_NAME }} just arrives
+            # Auto-assign person who triggered the failure.
+          assignees: ${{ github.actor }},${{ github.triggering_actor }}
+          labels: RELEASE_SYNC
+          body: |
+            ## Merging new release into local repository
+            ${{ steps.get_latest_release2.outputs.GH_TAG_NAME }}
+            ${{ steps.get_latest_release2.outputs.GH_HTML_URL }}
       ##
       # - name: checkout latest release(tag)
       #   uses: actions/checkout@v4
