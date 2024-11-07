@@ -133,7 +133,7 @@ jobs:
         run: |
           gh repo set-default ${TARGET_REPO}
           gh pr list
-          gh pr create -B main -H REL-${{ steps.import_variables.outputs.GH_TAG_NAME }} --title 'Merge new release $GH_TAG_NAME' --body 'This pull request import releases from trusted sources.'
+          gh pr create -B main -H REL-${{ steps.import_variables.outputs.GH_TAG_NAME }} --title "Merge new release ${GH_TAG_NAME}" --body 'This pull request import releases from trusted sources.'
 
       ##
       # - name: checkout latest release(tag)
