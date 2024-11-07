@@ -120,7 +120,11 @@ jobs:
           git branch -vv
           echo ":remote ============"
           git branch -r
-          
+      - name: Push new branch to remote using github-push-action
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.API_TOKEN }}
+          branch: REL-${{ steps.import_variables.outputs.GH_TAG_NAME }}
       ##
       # - name: checkout latest release(tag)
       #   uses: actions/checkout@v4
