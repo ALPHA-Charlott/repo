@@ -92,7 +92,7 @@ jobs:
         with:
           repository: ALPHA-Charlott/repo
           token: ${{ secrets.API_TOKEN }}
-      - name: Parse Nested Field with jq
+      - name: debug variables
         id: parse_field
         run: |
           echo ${{ steps.import_variables.outputs.GH_HTML_URL }}
@@ -110,6 +110,17 @@ jobs:
             ## Merging new release into local repository
             ${{ steps.import_variables.outputs.GH_TAG_NAME }}
             ${{ steps.import_variables.outputs.GH_HTML_URL }}
+      - name: Create a new branch with new tag from remote upstream repo 
+        run: |
+          git remote add upstream https://github.com/ALPHA-Charlott/azure-monitor-baseline-alerts.git
+          git fetch --tags upstream
+          # prepare a fresh new branch for Pull Request
+          git checkout ${{ steps.import_variables.outputs.GH_TAG_NAME }} -b REL-${{ steps.import_variables.outputs.GH_TAG_NAME }}
+          git remote -v
+          git branch -vv
+          echo ":remote ============"
+          git branch -r
+          
       ##
       # - name: checkout latest release(tag)
       #   uses: actions/checkout@v4
