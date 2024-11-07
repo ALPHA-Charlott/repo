@@ -99,9 +99,6 @@ jobs:
           echo ${{ steps.import_variables.outputs.GH_TAG_NAME }}
       - name: creating issues for track the merge request discussion
         uses: dacbd/create-issue-action@main
-        env:
-          GH_TAG_NAME: ${{ steps.import_variables.outputs.GH_TAG_NAME }}
-          GH_HTML_URL: ${{ steps.import_variables.outputs.GH_HTML_URL }}
         with:
           token: ${{ secrets.API_TOKEN }}
           title: |
@@ -111,8 +108,8 @@ jobs:
           labels: RELEASE_SYNC
           body: |
             ## Merging new release into local repository
-            $GH_TAG_NAME
-            $GH_HTML_URL
+            $${{ steps.import_variables.outputs.GH_TAG_NAME }}
+            $${{ steps.import_variables.outputs.GH_HTML_URL }}
       - name: Create a new branch with new tag from remote upstream repo 
         run: |
           git remote add upstream https://github.com/ALPHA-Charlott/azure-monitor-baseline-alerts.git
@@ -129,12 +126,14 @@ jobs:
           github_token: ${{ secrets.API_TOKEN }}
           branch: REL-${{ steps.import_variables.outputs.GH_TAG_NAME }}
       - name: Create Pull Request
-        run: |
-          gh repo set-default ALPHA-Charlott/repo
-          gh pr list
-          gh pr create -B main -H REL-V0.0.1 --title 'Merge new release' --body 'This pull request import releases from trusted sources.'
         env:
           GITHUB_TOKEN: ${{ secrets.API_TOKEN }}
+          TARGET_REPO: "ALPHA-Charlott/repo"  # Replace with the public repo owner and name
+        run: |
+          gh repo set-default ${TARGET_REPO}
+          gh pr list
+          gh pr create -B main -H REL-${{ steps.import_variables.outputs.GH_TAG_NAME }} --title 'Merge new release' --body 'This pull request import releases from trusted sources.'
+
       ##
       # - name: checkout latest release(tag)
       #   uses: actions/checkout@v4
