@@ -84,7 +84,7 @@ jobs:
           repository: ALPHA-Charlott/repo
           token: ${{ secrets.API_TOKEN }}
 
-      - name: Checkout current repo
+      - name: Checkout current release
         id: get_latest_release2
         run: |
           echo "${{ needs.release_check.outputs.NEXT_STEP }}"
@@ -96,9 +96,8 @@ jobs:
       - name: Parse Nested Field with jq
         id: parse_field
         run: |
-          echo "${{ env.URL }}" "HTML_URL >>>>"
-          echo ${{join(steps.run_tests.outputs.*, '\n')}}
           echo ${{ steps.get_latest_release2.outputs.GH_HTML_URL }}
+          echo ${{ steps.get_latest_release2.outputs.GH_TAG_NAME }}
 
       # - name: creating issues for track the merge request discussion
       #   uses: dacbd/create-issue-action@main
