@@ -111,8 +111,8 @@ jobs:
           labels: RELEASE_SYNC
           body: |
             ## Merging new release into local repository
-            ${{ GH_TAG_NAME }}
-            ${{ GH_HTML_URL }}
+            $GH_TAG_NAME
+            $GH_HTML_URL
       - name: Create a new branch with new tag from remote upstream repo 
         run: |
           git remote add upstream https://github.com/ALPHA-Charlott/azure-monitor-baseline-alerts.git
