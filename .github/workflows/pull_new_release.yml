@@ -85,20 +85,20 @@ jobs:
           token: ${{ secrets.API_TOKEN }}
 
       - name: Checkout current repo
-        id: get_latest_release
+        id: get_latest_release2
         run: |
           echo "${{ needs.release_check.outputs.NEXT_STEP }}"
           echo "${{ needs.release_check.outputs.GH_TAG_NAME }}"
           echo "${{ needs.release_check.outputs.GH_HTML_URL }}"
-          echo "GH_TAG_NAME=${{ needs.release_check.outputs.GH_TAG_NAME }}" >> $GITHUB_OUTPUT
-          echo "GH_HTML_URL=${{ needs.release_check.outputs.GH_HTML_URL }}" >> $GITHUB_OUTPUT
+          echo "GH_TAG_NAME=${{ needs.release_check.outputs.GH_TAG_NAME }}\n" >> $GITHUB_OUTPUT
+          echo "GH_HTML_URL=${{ needs.release_check.outputs.GH_HTML_URL }}\n" >> $GITHUB_OUTPUT
         
       - name: Parse Nested Field with jq
         id: parse_field
         run: |
           echo "${{ env.URL }}" "HTML_URL >>>>"
-          echo ${{ steps.get_latest_release.outputs.GH_TAG_NAME }}
-          echo ${{ steps.get_latest_release.outputs.GH_HTML_URL }}
+          echo ${{join(steps.run_tests.outputs.*, '\n')}}
+          echo ${{ steps.get_latest_release2.outputs.GH_HTML_URL }}
 
       # - name: creating issues for track the merge request discussion
       #   uses: dacbd/create-issue-action@main
