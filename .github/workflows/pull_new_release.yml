@@ -78,40 +78,38 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout current repo
-        uses: actions/checkout@v4
-        with:
-          repository: ALPHA-Charlott/repo
-          token: ${{ secrets.API_TOKEN }}
-
-      - name: Checkout current release
-        id: get_latest_release2
+      - name: import variables from previous context
+        id: import_variables
         run: |
           echo "${{ needs.release_check.outputs.NEXT_STEP }}"
           echo "${{ needs.release_check.outputs.GH_TAG_NAME }}"
           echo "${{ needs.release_check.outputs.GH_HTML_URL }}"
           echo "GH_TAG_NAME=${{ needs.release_check.outputs.GH_TAG_NAME }}" >> $GITHUB_OUTPUT
           echo "GH_HTML_URL=${{ needs.release_check.outputs.GH_HTML_URL }}" >> $GITHUB_OUTPUT
-        
+          
+      - name: Checkout current repo
+        uses: actions/checkout@v4
+        with:
+          repository: ALPHA-Charlott/repo
+          token: ${{ secrets.API_TOKEN }}
       - name: Parse Nested Field with jq
         id: parse_field
         run: |
-          echo ${{ steps.get_latest_release2.outputs.GH_HTML_URL }}
-          echo ${{ steps.get_latest_release2.outputs.GH_TAG_NAME }}
-
+          echo ${{ steps.import_variables.outputs.GH_HTML_URL }}
+          echo ${{ steps.import_variables.outputs.GH_TAG_NAME }}
       - name: creating issues for track the merge request discussion
         uses: dacbd/create-issue-action@main
         with:
           token: ${{ secrets.API_TOKEN }}
           title: |
-             New release ${{ steps.get_latest_release2.outputs.GH_TAG_NAME }} just arrives
+             New release ${{ steps.import_variables.outputs.GH_TAG_NAME }} just arrives
             # Auto-assign person who triggered the failure.
           assignees: ${{ github.actor }},${{ github.triggering_actor }}
           labels: RELEASE_SYNC
           body: |
             ## Merging new release into local repository
-            ${{ steps.get_latest_release2.outputs.GH_TAG_NAME }}
-            ${{ steps.get_latest_release2.outputs.GH_HTML_URL }}
+            ${{ steps.import_variables.outputs.GH_TAG_NAME }}
+            ${{ steps.import_variables.outputs.GH_HTML_URL }}
       ##
       # - name: checkout latest release(tag)
       #   uses: actions/checkout@v4
