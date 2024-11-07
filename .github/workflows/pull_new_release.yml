@@ -72,6 +72,7 @@ jobs:
           
   # This workflow contains a few steps "submit Issue and PR"
   submit_pr:
+    needs: [release_check]
     # if: |
     #   needs.release_check.outputs.NEXT_STEP == 'continue'
     # The type of runner that the job will run on
