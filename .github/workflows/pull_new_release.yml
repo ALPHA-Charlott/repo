@@ -86,6 +86,7 @@ jobs:
       - name: Checkout current repo
         id: get_latest_release
         run: |
+          echo "${{ needs.release_check.outputs.NEXT_STEP }}"
           echo "${{ needs.release_check.outputs.GH_TAG_NAME }}"
           echo "${{ needs.release_check.outputs.GH_HTML_URL }}"
           echo "GH_TAG_NAME=${{ needs.release_check.outputs.GH_TAG_NAME }}" >> $GITHUB_OUTPUT
