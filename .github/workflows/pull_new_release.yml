@@ -19,7 +19,9 @@ jobs:
     name: release_checker
     runs-on: ubuntu-latest
     outputs:
-      next_step: ${{ steps.get_latest_release.outputs.result }}
+      NEXT_STEP: ${{ steps.get_latest_release.outputs.result }}
+      GH_TAG_NAME: ${{ steps.get_latest_release.outputs.GH_TAG_NAME }}
+      GH_HTML_URL: ${{ steps.get_latest_release.outputs.GH_HTML_URL }}
     steps:
       - name: Checkout current repo
         uses: actions/checkout@v4
@@ -71,7 +73,7 @@ jobs:
   # This workflow contains a few steps "submit Issue and PR"
   submit_pr:
     # if: |
-    #   needs.release_check.outputs.next_step == 'continue'
+    #   needs.release_check.outputs.NEXT_STEP == 'continue'
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     steps:
