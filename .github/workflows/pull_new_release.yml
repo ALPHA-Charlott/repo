@@ -129,9 +129,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.API_TOKEN }}
           GH_TAG_NAME: ${{ steps.import_variables.outputs.GH_TAG_NAME }}
-          TARGET_REPO: "ALPHA-Charlott/repo"  # Replace with the public repo owner and name
+          # TARGET_REPO: "ALPHA-Charlott/repo"  # Replace with the public repo owner and name
         run: |
-          gh repo set-default ${TARGET_REPO}
+          # gh repo set-default ${TARGET_REPO}
           gh pr list
           gh pr create -B main -H REL-${{ steps.import_variables.outputs.GH_TAG_NAME }} --title "Merge new release ${GH_TAG_NAME}" --body 'This pull request import releases from trusted sources.'
 
