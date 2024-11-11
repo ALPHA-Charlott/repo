@@ -26,4 +26,7 @@ jobs:
 
       - name: Run Python script with config file
         run: |
+          ls ./
+          echo ">>"
+          ls ./config
           python config/script.py config.json
