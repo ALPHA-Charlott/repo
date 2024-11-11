@@ -26,4 +26,7 @@ jobs:
 
       - name: Run Python script with config file
         run: |
+          env
+          pwd
+          ls
           python script.py config.json
